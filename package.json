@@ -1,0 +1,29 @@
+{
+  "name": "linecharts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "next build",
+    "start": "next start",
+    "export": "next build && next export"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LLKCoder/Linecharts.git"
+  },
+  "author": "Feng Yonghao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LLKCoder/Linecharts/issues"
+  },
+  "homepage": "https://github.com/LLKCoder/Linecharts#readme",
+  "dependencies": {
+    "next": "^9.5.3",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.1",
+    "redux": "^4.0.5"
+  }
+}
