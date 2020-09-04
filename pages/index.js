@@ -4,14 +4,17 @@ import { takeLatest, takeEvery, put, select, call, all} from 'redux-saga/effects
 import { Provider } from 'react-redux'
 import createSagaMiddleware from 'redux-saga'
 import { combineReducers, createStore, applyMiddleware, compose }  from 'redux'
-
-// reducer初期化
-const rootReducer = combineReducers({})
+import * as LayoutComponent from '../components/layout/layout'
 
 // state初期化
 const initialState = {
-
+    LayoutComponent: LayoutComponent.initialState
 }
+
+// reducer初期化
+const rootReducer = combineReducers({
+    LayoutComponent: LayoutComponent.reducer
+})
 
 const sagaMiddleware = createSagaMiddleware()
 const composeEnhancser = typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -24,7 +27,7 @@ const LineCharts = () => (
         
         `}</style>
         <Provider store={store}>
-            This is my first page
+            <LayoutComponent.view />
         </Provider>
     </div>
 )
