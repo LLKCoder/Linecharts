@@ -8,8 +8,38 @@ import { connect } from 'react-redux';
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
+function MenuContent (props) {
+    const { children, value, index, ...other} = props
+    return (
+        <div
+            hidden = {value !== index}
+            id= {`menu-conten-${index}`}
+            {...other}
+        >
+            {
+                value === index && (
+                    <Content>{children}</Content>
+                )
+            }
+        </div>
+    )
+}
+
+function allContentProps (index) {
+    return {
+        className: `site-layout-background-${index}`,
+        style: {
+            padding: 24,
+            margin: 0,
+            minHeight: 280,
+        },
+        index: index
+    }
+}
+
 export const initialState = {
-    status: null
+    menuIndex: 1
+
 }
 
 export const types = {
@@ -17,8 +47,8 @@ export const types = {
 }
 
 export const actions = {
-    changeMenu(selected) {
-        return{type: types.CHANGE_MENU, payload: selected}
+    changeMenu(key) {
+        return{type: types.CHANGE_MENU, payload: key}
     }
 }
 
@@ -26,7 +56,7 @@ export function reducer(state = initialState, action) {
     const payload = action.payload
     switch (action.type) {
         case types.CHANGE_MENU:
-            return {...state, status: payload}
+            return {...state, menuIndex: payload}
         default:
             return state;
     }
@@ -43,6 +73,9 @@ class LayoutComponent extends Component {
 
     componentDidUpdate () {
 
+    }
+    handle = (event) => {
+        this.props.actions.changeMenu(parseInt(event.key))
     }
 
     render() {
@@ -66,15 +99,15 @@ class LayoutComponent extends Component {
                 <Layout>
                     <Header className="header">
                     <div className="logo" />
-                    <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+                    {/* <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
                         <Menu.Item key="1">nav 1</Menu.Item>
                         <Menu.Item key="2">nav 2</Menu.Item>
                         <Menu.Item key="3">nav 3</Menu.Item>
-                    </Menu>
+                    </Menu> */}
                     </Header>
                     <Layout>
                     <Sider width={200} className="site-layout-background">
-                        <Menu
+                        <Menu onClick={this.handle}
                         mode="inline"
                         defaultSelectedKeys={['1']}
                         defaultOpenKeys={['sub1']}
@@ -101,21 +134,15 @@ class LayoutComponent extends Component {
                         </Menu>
                     </Sider>
                     <Layout style={{ padding: '0 24px 24px' }}>
-                        <Breadcrumb style={{ margin: '16px 0' }}>
-                        <Breadcrumb.Item>Home</Breadcrumb.Item>
-                        <Breadcrumb.Item>List</Breadcrumb.Item>
-                        <Breadcrumb.Item>App</Breadcrumb.Item>
-                        </Breadcrumb>
-                        <Content
-                        className="site-layout-background"
-                        style={{
-                            padding: 24,
-                            margin: 0,
-                            minHeight: 280,
-                        }}
-                        >
-                        Content
-                        </Content>
+                        <MenuContent {...allContentProps(1)} value={this.props.menuIndex}>
+                        menu 1
+                        </MenuContent>
+                        <MenuContent {...allContentProps(2)} value={this.props.menuIndex}>
+                        menu 2
+                        </MenuContent>
+                        <MenuContent {...allContentProps(3)} value={this.props.menuIndex}>
+                        menu 3
+                        </MenuContent>
                     </Layout>
                     </Layout>
                 </Layout>
@@ -125,7 +152,7 @@ class LayoutComponent extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    status: state.LayoutComponent.status
+    menuIndex: state.LayoutComponent.menuIndex
 })
 
 const mapDispatchToProps = dispatch => ({
